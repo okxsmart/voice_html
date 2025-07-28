@@ -10,6 +10,6 @@
 — Автовідповіді, поради, аналітика
 — Інтеграція GPT / LLM / PDF / OCR / API
 
-✅ Демо безкоштовно: okxsmart.github.io/voice_html
+✅ Демо безкоштовно: [okxsmart.github.io/voice_html](https://okxsmart.github.io/voicerus_html)
 
-📩 Написати: @Okx_Smartbot
+📩 Написати: [@Okx_Smartbot](https://t.me/Okx_Smartbot)
