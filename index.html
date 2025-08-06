@@ -24,12 +24,15 @@
       padding: 10px;
       margin-bottom: 10px;
       white-space: pre-wrap;
+      display: flex;
+      flex-direction: column;
     }
     .message {
       margin-bottom: 8px;
       padding: 6px 10px;
       border-radius: 6px;
       max-width: 80%;
+      word-wrap: break-word;
     }
     .user {
       background: #0a84ff22;
@@ -100,14 +103,13 @@
     </select>
 
     <label for="voice" style="display:none;">Голос озвучення:</label>
-	<select id="voice" title="Голос для озвучення відповіді" style="display:none;">
-	  <option value="Ukrainian Female" selected>Українська Жіноча</option>
-	  <option value="Ukrainian Male">Українська Чоловіча</option>
-	  <option value="Russian Female">Російська Жіноча</option>
-	  <option value="UK English Female">Англійська Жіноча</option>
-	  <option value="UK English Male">Англійська Чоловіча</option>
-	</select>
-
+    <select id="voice" title="Голос для озвучення відповіді" style="display:none;">
+      <option value="Ukrainian Female" selected>Українська Жіноча</option>
+      <option value="Ukrainian Male">Українська Чоловіча</option>
+      <option value="Russian Female">Російська Жіноча</option>
+      <option value="UK English Female">Англійська Жіноча</option>
+      <option value="UK English Male">Англійська Чоловіча</option>
+    </select>
   </div>
 
   <div id="chat-box" aria-live="polite" aria-label="Історія чату"></div>
@@ -135,13 +137,11 @@
     const voiceSelect = document.getElementById("voice");
     const statusDiv = document.getElementById("status");
 
-    const API_KEY = "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"; // Замінити на свій ключ!
-
     let lastBotResponse = "";
     let recognition = null;
     let recognizing = false;
 
-    // Функція додавання повідомлення у чат
+    // Додати повідомлення в чат
     function appendMessage(sender, text) {
       const msgDiv = document.createElement("div");
       msgDiv.className = "message " + (sender === "user" ? "user" : "bot");
@@ -150,7 +150,7 @@
       chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    // Відправка повідомлення на сервер (Groq API)
+    // Відправити повідомлення на API
     async function sendMessage(text) {
       appendMessage("user", text);
       statusDiv.textContent = "⏳ Очікую відповідь...";
@@ -176,10 +176,9 @@
       };
 
       try {
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        const res = await fetch("https://my-ai-worker.valeraiva2020.workers.dev/", {
           method: "POST",
           headers: {
-            "Authorization": "Bearer " + API_KEY,
             "Content-Type": "application/json"
           },
           body: JSON.stringify(payload)
@@ -190,13 +189,14 @@
         }
 
         const data = await res.json();
-        const botText = data.choices?.[0]?.message?.content?.trim() || "⚠️ Порожня відповідь";
+        // Припускаємо, що твій воркер повертає { response: "текст відповіді" }
+        const botText = data.response?.trim() || "⚠️ Порожня відповідь";
 
         appendMessage("bot", botText);
         lastBotResponse = botText;
         statusDiv.textContent = "";
 
-        // Автоматично озвучити відповідь
+        // Озвучення відповіді
         speak(botText, lang);
       } catch (err) {
         appendMessage("bot", "⚠️ Помилка: " + err.message);
@@ -207,7 +207,7 @@
       }
     }
 
-    // Функція озвучення тексту
+    // Озвучити текст через responsiveVoice
     function speak(text, lang) {
       const voiceMap = {
         "uk-UA": "Ukrainian Female",
@@ -220,7 +220,7 @@
       }
     }
 
-    // Обробка кнопки "Відправити"
+    // Відправка по кліку
     btnSend.addEventListener("click", () => {
       const text = userInput.value.trim();
       if (text) {
@@ -229,7 +229,7 @@
       }
     });
 
-    // Обробка клавіші Enter (без Shift) для відправки
+    // Відправка по Enter (без Shift)
     userInput.addEventListener("keydown", (e) => {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
@@ -237,21 +237,21 @@
       }
     });
 
-    // Обробка кнопки "Очистити чат"
+    // Очистити чат
     btnClear.addEventListener("click", () => {
       chatBox.innerHTML = "";
       lastBotResponse = "";
       statusDiv.textContent = "";
     });
 
-    // Обробка кнопки "Відповісти голосом"
+    // Озвучити останню відповідь
     btnSpeak.addEventListener("click", () => {
       if (lastBotResponse) {
         speak(lastBotResponse, languageSelect.value);
       }
     });
 
-    // Ініціалізація голосового введення
+    // Голосове введення (Web Speech API)
     btnVoice.addEventListener("click", () => {
       if (!('webkitSpeechRecognition' in window)) {
         alert("Голосове введення не підтримується вашим браузером.");
@@ -278,7 +278,6 @@
       recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
         userInput.value = transcript;
-        // Автоматична відправка після розпізнавання
         recognition.stop();
         sendMessage(transcript);
       };
@@ -302,7 +301,6 @@
 
       recognition.start();
     });
-
   </script>
 </body>
 </html>
