@@ -93,14 +93,31 @@
       <option value="en-US">Англійська 🇬🇧</option>
     </select>
 
-    <label for="model">Модель LLM:</label>
-    <select id="model" title="Вибір моделі">
-      <option value="llama3-70b-8192" selected>LLaMA 3 (70B)</option>
-      <option value="llama3-8b-8192">LLaMA 3 (8B)</option>
-      <option value="meta-llama/llama-4-maverick-17b-128e-instruct">LLaMA 4 Maverick (17B)</option>
-      <option value="deepseek-r1-distill-llama-70b">DeepSeek Distill 70B</option>
-      <option value="gemma2-9b-it">Gemma 2 (9B IT)</option>
-    </select>
+  <label for="model">Модель LLM:</label>
+	<select id="model" title="Вибір моделі">
+	  <optgroup label="🧠 Потужні (GPT-4 рівня)">
+		<option value="llama-3.3-70b-versatile" selected>LLaMA 3.3 (70B Versatile)</option>
+		<option value="openai/gpt-oss-120b">GPT-OSS 120B</option>
+		<option value="qwen/qwen3-32b">Qwen3 32B</option>
+		<option value="deepseek-r1-distill-llama-70b">DeepSeek Distill 70B</option>
+		<option value="moonshotai/kimi-k2-instruct">Kimi K2 (Moonshot)</option>
+	  </optgroup>
+
+	  <optgroup label="⚡ Швидкі та легкі">
+		<option value="llama-3.1-8b-instant">LLaMA 3.1 (8B Instant)</option>
+		<option value="llama3-8b-8192">LLaMA 3 (8B)</option>
+		<option value="gemma2-9b-it">Gemma 2 (9B IT)</option>
+		<option value="compound-beta-mini">Groq Compound Beta Mini</option>
+	  </optgroup>
+
+	  <optgroup label="🔬 Експериментальні">
+		<option value="meta-llama/llama-4-scout-17b-16e-instruct">LLaMA 4 Scout (17B)</option>
+		<option value="meta-llama/llama-4-maverick-17b-128e-instruct">LLaMA 4 Maverick (17B)</option>
+		<option value="compound-beta">Groq Compound Beta</option>
+		<option value="openai/gpt-oss-20b">GPT-OSS 20B</option>
+		<option value="allam-2-7b">Allam 2 (7B, KSA)</option>
+	  </optgroup>
+	</select>
 
     <label for="voice" style="display:none;">Голос озвучення:</label>
     <select id="voice" title="Голос для озвучення відповіді" style="display:none;">
